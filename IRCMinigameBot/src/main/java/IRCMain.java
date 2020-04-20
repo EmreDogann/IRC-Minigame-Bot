@@ -14,6 +14,7 @@ class IrcMain {
     private static Battleship battleshipGame = null;
     private static ConnectFour connectFourGame = null;
     private static TicTacToe ticTacToeGame = null;
+    private static BlackjackTwentyOne blackjackTwentyOneGame = null;
     private static PrintWriter out;
     private static Socket socket;
     static Scanner in;
@@ -105,6 +106,16 @@ class IrcMain {
                                 if (command[2].equals("start")) {
                                     ticTacToeGame = new TicTacToe(serverMessageArr);
                                     ticTacToeGame = null;
+                                }
+                            } else {
+                                write("PRIVMSG ", "#" + channel + " :Invalid Command.");
+                            }
+                            break;
+                        case "blackjack21":
+                            if (command.length == 4) {
+                                if (command[2].equals("start")) {
+                                    blackjackTwentyOneGame = new BlackjackTwentyOne(serverMessageArr);
+                                    blackjackTwentyOneGame = null;
                                 }
                             } else {
                                 write("PRIVMSG ", "#" + channel + " :Invalid Command.");
