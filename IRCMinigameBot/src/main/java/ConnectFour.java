@@ -22,10 +22,6 @@ public class ConnectFour {
         startGame();
     }
 
-    public String[] getPlayers() {
-        return new String[]{playerNames[0], playerNames[1]};
-    }
-
     private void startGame() {
         // Send message to the other player.
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
