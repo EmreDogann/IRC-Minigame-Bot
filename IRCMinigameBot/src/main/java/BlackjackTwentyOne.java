@@ -1,3 +1,5 @@
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -78,6 +80,7 @@ public class BlackjackTwentyOne {
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         startGame();
                     }
+                    return;
                 } else if (messageArr[0].equals("hit") && commandArr[1].split("!~")[0].equals(players[currentPlayer].getName()) && deck.size() != 0) {
                     Random rand = new Random();
                     int index = rand.nextInt(deck.size());
@@ -98,11 +101,12 @@ public class BlackjackTwentyOne {
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         startGame();
                     }
+                    return;
                 } else if (messageArr[0].equals("stop") && commandArr[1].split("!~")[0].equals(players[currentPlayer].getName())) {
                     IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Game has been stopped!");
                     IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " has stopped the match! Game Over.");
+                    return;
                 }
-                return;
             }
         }
     }
@@ -139,6 +143,10 @@ public class BlackjackTwentyOne {
             } else {
                 return 2;
             }
+        } else if (sums[0] > 21) {
+            return 2;
+        } else if (sums[1] > 21) {
+            return 1;
         } else if (sums[0] > sums[1]) {
             return 1;
         } else if (sums[1] > sums[0]) {

@@ -77,7 +77,6 @@ class IrcMain {
                             if (command.length == 4) {
                                 if (command[2].equals("start")) {
                                     battleshipGame = new Battleship(serverMessageArr);
-                                    battleshipGame = null;
                                 }
                             } else if (command.length == 3) {
                                 if (command[2].equals("howto")) {
@@ -95,7 +94,6 @@ class IrcMain {
                             if (command.length == 4) {
                                 if (command[2].equals("start")) {
                                     connectFourGame = new ConnectFour(serverMessageArr);
-                                    connectFourGame = null;
                                 }
                             } else {
                                 write("PRIVMSG ", "#" + channel + " :Invalid Command.");
@@ -105,7 +103,6 @@ class IrcMain {
                             if (command.length == 4) {
                                 if (command[2].equals("start")) {
                                     ticTacToeGame = new TicTacToe(serverMessageArr);
-                                    ticTacToeGame = null;
                                 }
                             } else {
                                 write("PRIVMSG ", "#" + channel + " :Invalid Command.");
@@ -115,7 +112,6 @@ class IrcMain {
                             if (command.length == 4) {
                                 if (command[2].equals("start")) {
                                     blackjackTwentyOneGame = new BlackjackTwentyOne(serverMessageArr);
-                                    blackjackTwentyOneGame = null;
                                 }
                             } else {
                                 write("PRIVMSG ", "#" + channel + " :Invalid Command.");

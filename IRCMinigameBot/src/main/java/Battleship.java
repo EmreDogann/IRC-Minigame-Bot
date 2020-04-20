@@ -8,7 +8,7 @@ public class Battleship {
         boards = new Board[]{new Board(playerName), new Board(otherPlayerName)};
 
         // Send welcome messages!
-        IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Welcome to Battleship!");
+        IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :" + "\u000313Welcome to Battleship!\u0003");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 1 -> " + playerName);
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 2 -> " + otherPlayerName);
 

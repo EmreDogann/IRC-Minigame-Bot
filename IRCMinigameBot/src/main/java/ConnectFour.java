@@ -51,8 +51,24 @@ public class ConnectFour {
                             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " has 4 in a row!");
                             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " wins!");
                         } else {
-                            currentPlayer = currentPlayer == 0 ? 1 : 0;
-                            startGame();
+                            boolean freeSpace = false;
+                            for (int i = 0; i < 6; i++) {
+                                for (int x = 0; x < 7; x++) {
+                                    if (board[i][x] == "-") {
+                                        freeSpace = true;
+                                        break;
+                                    };
+                                }
+
+                                if (freeSpace) break;
+                            }
+
+                            if (freeSpace) {
+                                currentPlayer = currentPlayer == 0 ? 1 : 0;
+                                startGame();
+                            } else {
+                                IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :No more positions remaining! It's a draw!");
+                            }
                         }
                     } else {
                         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :You cannot put a coin there! Try Again!");
