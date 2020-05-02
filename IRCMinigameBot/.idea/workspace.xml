@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="799079ff-5f70-4f1e-8d6d-d388155ae37a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/IRCMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/IRCMain.java" afterDir="false" />
-    </list>
+    <list default="true" id="799079ff-5f70-4f1e-8d6d-d388155ae37a" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +96,7 @@
       <workItem from="1587347322708" duration="388000" />
       <workItem from="1587389022899" duration="18752000" />
       <workItem from="1588199407873" duration="132000" />
-      <workItem from="1588432146292" duration="15827000" />
+      <workItem from="1588432146292" duration="15987000" />
     </task>
     <servers />
   </component>
