@@ -28,7 +28,7 @@ class IrcMain {
         in = new Scanner(socket.getInputStream());
 
         write("NICK", "EmreBot");
-        write("USER", "emreBot 8 * :emre's bot v0.1" );
+        write("USER", "emreBot 8 * :emre's bot v1.2" );
         write("JOIN", "#" + channel);
 
         // Parse through initial server messages.
@@ -44,7 +44,7 @@ class IrcMain {
             }
         }
 
-        write("NOTICE ", "Enter 'emrebot help' to see the list of commands.");
+        write("NOTICE ", "#" + channel + " :Enter 'emrebot help' to see the list of commands.");
 
         // While loop which listens for defined commands.
         while (in.hasNext()) {
@@ -72,7 +72,7 @@ class IrcMain {
                                     write("PRIVMSG ", "#" + channel + " :In Battleship there are 2 players, each with 5 ships on a 8x8 size grid.");
                                     write("PRIVMSG ", "#" + channel + " :Each ship is a different size ranging from 5 units long down to 2 units.");
                                     write("PRIVMSG ", "#" + channel + " :A ship can be placed horizontally or vertically.");
-                                    write("PRIVMSG ", "#" + channel + " :Each player takes turns in guessing where the other player's ships are byt entering coordinates.");
+                                    write("PRIVMSG ", "#" + channel + " :Each player takes turns in guessing where the other player's ships are by entering coordinates.");
                                     write("PRIVMSG ", "#" + channel + " :The first player to destroy all parts of the pother player's grid which has a ship on it wins!");
                                 }
                             } else {
