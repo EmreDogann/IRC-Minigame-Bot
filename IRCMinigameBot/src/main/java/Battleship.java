@@ -1,10 +1,13 @@
+// Class of battleship game.
 public class Battleship {
     private Board[] boards;
     private int currentPlayer = 0;
 
     public Battleship(String[] command) {
+        // Store player names.
         String playerName = command[1].split("!~")[0];
         String otherPlayerName = command[2].split(" ")[3];
+        // Initialize game board.
         boards = new Board[]{new Board(playerName), new Board(otherPlayerName)};
 
         // Send welcome messages!

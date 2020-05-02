@@ -7,7 +7,7 @@ public class ConnectFour {
         playerNames[0] = command[1].split("!~")[0];
         playerNames[1] = command[2].split(" ")[3];
 
-        // Initialize both player's boards with the default board value.
+        // Initialize board with the default value.
         for (int i = 0; i < 6; i++) {
             for (int x = 0; x < 7; x++) {
                 board[i][x] = "-";
@@ -23,7 +23,6 @@ public class ConnectFour {
     }
 
     private void startGame() {
-        // Send message to the other player.
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + "'s turn!");
@@ -39,22 +38,25 @@ public class ConnectFour {
             boolean winner = false;
 
             if (messageArr.length > 1) {
-                // When the current player has entered their attack command...
+                // When the current player has entered a location they would like to place a coin...
                 if (messageArr[0].equals("place") && commandArr[1].split("!~")[0].equals(playerNames[currentPlayer])) {
-                    // Check if they hit one of the other player's ships.
+                    // Check if the selected position is valid.
                     int canPut = checkPlace(Integer.parseInt(messageArr[1]));
 
+                    // If the selected position is valid, check if the new state of the board contains 4 in a row.
                     if (canPut != -1) {
                         winner = checkWinner();
                         if (winner) {
+                            // If a winner is found, display winner messages and end the game.
                             printBoard();
                             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " has 4 in a row!");
                             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " wins!");
                         } else {
+                            // Check if the board is completely full.
                             boolean freeSpace = false;
                             for (int i = 0; i < 6; i++) {
                                 for (int x = 0; x < 7; x++) {
-                                    if (board[i][x] == "-") {
+                                    if (board[i][x].equals("-")) {
                                         freeSpace = true;
                                         break;
                                     };
@@ -63,6 +65,7 @@ public class ConnectFour {
                                 if (freeSpace) break;
                             }
 
+                            // If there are no more empty spaces on the AND there isn't a winner, end the game and declare it as a draw.
                             if (freeSpace) {
                                 currentPlayer = currentPlayer == 0 ? 1 : 0;
                                 startGame();
@@ -71,12 +74,14 @@ public class ConnectFour {
                             }
                         }
                     } else {
+                        // If the selected position is not valid...
                         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :You cannot put a coin there! Try Again!");
                         startGame();
                     }
                     return;
                 }
             } else if (messageArr.length == 1 && messageArr[0].equals("stop") && commandArr[1].split("!~")[0].equals(playerNames[currentPlayer])) {
+                // If game has been stopped, send messages.
                 IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Game has been stopped!");
                 IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " has stopped the match! Game Over.");
                 return;
@@ -84,6 +89,7 @@ public class ConnectFour {
         }
     }
 
+    // Check if the player's selected column has spaces available, if so, place their coin on the lowest row that has a space free.
     private int checkPlace(int col) {
         int row = -1;
         col--;
@@ -97,6 +103,7 @@ public class ConnectFour {
         return row;
     }
 
+    // Identify if there is 4-in-a-row on the board.
     private boolean checkWinner() {
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 7; col++) {
@@ -130,7 +137,7 @@ public class ConnectFour {
         return false;
     }
 
-    // Display the current players board along with the current player's view of the other player's board.
+    // Display the board.
     private void printBoard() {
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :-------Board-------");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :1   2   3   4   5   6   7");

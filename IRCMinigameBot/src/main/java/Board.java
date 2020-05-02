@@ -1,6 +1,6 @@
 import java.util.Random;
 
-// An instance of the player's board state.
+// Class of the player's battleship board state.
 public class Board {
     private String[][] grid = new String[8][8];
     private String[][] gridChecked = new String[8][8];
@@ -11,7 +11,7 @@ public class Board {
     public Board(String playerName) {
         this.playerName = playerName;
 
-        // Initialize both player's boards with the default board value.
+        // Initialize player's boards with the default board values.
         for (int i = 0; i < 8; i++) {
             for (int x = 0; x < 8; x++) {
                 grid[i][x] = "-";
@@ -20,7 +20,7 @@ public class Board {
             }
         }
 
-        // Randomly generate all ships for your board.
+        // Randomly generate all ships for the player's board.
         generateRandomShips(5);
         generateRandomShips(4);
         generateRandomShips(3);
@@ -112,7 +112,7 @@ public class Board {
         }
     }
 
-    // Check if the other player hit a shit on your board.
+    // Check if the other player hit a ship on the player's board.
     public boolean hit(int row, int col) {
         row--;
         col--;
@@ -125,7 +125,7 @@ public class Board {
         }
     }
 
-    // Record your guess on your view of the other player's board.
+    // Record the player's guess on your view of the other player's board.
     public void recordHitAttempt(int row, int col, boolean didHit) {
         row--;
         col--;
@@ -137,7 +137,7 @@ public class Board {
         }
     }
 
-    // Display your board.
+    // Display the player's board.
     public void printBoard() {
         for (int i = 0; i < 8; i++) {
             StringBuilder row = new StringBuilder();

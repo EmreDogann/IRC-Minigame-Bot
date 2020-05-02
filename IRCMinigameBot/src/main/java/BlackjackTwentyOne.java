@@ -1,8 +1,7 @@
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 import java.util.ArrayList;
 import java.util.Random;
 
+// Class for the game called 21, a variant of blackjack.
 public class BlackjackTwentyOne {
     private ArrayList<Integer> deck = new ArrayList<>();
     private BlackjackPlayer[] players = new BlackjackPlayer[2];
@@ -17,6 +16,7 @@ public class BlackjackTwentyOne {
             deck.add(i);
         }
 
+        // Assign 2 random cards from the newly initialised game deck to each player. Remove these 4 assigned cards from the game deck.
         Random rand = new Random();
         for (int i = 0; i < 4; i++) {
             int index = rand.nextInt(deck.size());
@@ -24,7 +24,7 @@ public class BlackjackTwentyOne {
             deck.remove(index);
         }
 
-        // Send introductory messages!
+        // Send introductory howto messages!
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Welcome to 21! A variation of Blackjack!");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 1 -> " + players[0].getName());
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 2 -> " + players[1].getName());
@@ -38,6 +38,7 @@ public class BlackjackTwentyOne {
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Let the game begin!");
 
+        // Privately message each player their mystery card.
         IrcMain.write("PRIVMSG ", players[0].getName() + " :Your mystery card is " + players[0].getHand().get(0));
         IrcMain.write("PRIVMSG ", players[1].getName() + " :Your mystery card is " + players[1].getHand().get(0));
 
@@ -45,9 +46,9 @@ public class BlackjackTwentyOne {
     }
 
     private void startGame() {
+        // If both players don't stay for their turns, reset their state.
         players[currentPlayer].setStay(false);
 
-        // Send message to the other player.
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
 
@@ -63,46 +64,36 @@ public class BlackjackTwentyOne {
             String[] messageArr = commandArr[2].split(" ");
 
             if (messageArr.length == 1) {
-                // When the current player has entered their attack command...
+                // If the current player chooses to stay...
                 if (messageArr[0].equals("stay") && commandArr[1].split("!~")[0].equals(players[currentPlayer].getName()) && !players[currentPlayer].isStay()) {
                     players[currentPlayer].setStay(true);
+                    // If the other player has already chosen to stay on their turn, check who the winner is and end the game.
                     if (players[currentPlayer == 0 ? 1 : 0].isStay()) {
-                        int winner = checkWinner();
-
-                        if (winner == -1) {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :It's a draw!");
-                        } else if (winner == 1) {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 1 wins!");
-                        } else {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 2 wins!");
-                        }
+                        getWinner();
                     } else {
+                        // Swap turns.
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         startGame();
                     }
                     return;
                 } else if (messageArr[0].equals("hit") && commandArr[1].split("!~")[0].equals(players[currentPlayer].getName()) && deck.size() != 0) {
+                    // If player chooses to hit, draw a random card from the game deck, assign it to the player's hand, then remove that card from the game deck.
                     Random rand = new Random();
                     int index = rand.nextInt(deck.size());
                     players[currentPlayer].addToHand(deck.get(index));
                     deck.remove(index);
 
+                    // If the game deck is empty, check for a winner.
                     if (deck.size() == 0) {
-                        int winner = checkWinner();
-
-                        if (winner == -1) {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :It's a draw!");
-                        } else if (winner == 1) {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 1 wins!");
-                        } else {
-                            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 2 wins!");
-                        }
+                        getWinner();
                     } else {
+                        // Swap turns.
                         currentPlayer = currentPlayer == 0 ? 1 : 0;
                         startGame();
                     }
                     return;
                 } else if (messageArr[0].equals("stop") && commandArr[1].split("!~")[0].equals(players[currentPlayer].getName())) {
+                    // If the player chooses to stop the game...
                     IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Game has been stopped!");
                     IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player " + (currentPlayer+1) + " has stopped the match! Game Over.");
                     return;
@@ -111,10 +102,25 @@ public class BlackjackTwentyOne {
         }
     }
 
+    // Print who the winner is.
+    private void getWinner() {
+        int winner = checkWinner();
+
+        if (winner == -1) {
+            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :It's a draw!");
+        } else if (winner == 1) {
+            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 1 wins!");
+        } else {
+            IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Player 2 wins!");
+        }
+    }
+
+    // Check who the winner is. The player with the hand closest to 21 wins.
     private int checkWinner() {
         int[] sums = new int[2];
         IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :Checking Winner...");
 
+        // Display final state of the game.
         for (int i = 0; i < 2; i++) {
             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :-------Player " + (i+1) + "'s Hand-------");
             StringBuilder row = new StringBuilder();
@@ -134,6 +140,7 @@ public class BlackjackTwentyOne {
             IrcMain.write("PRIVMSG ", "#" + IrcMain.channel + " :");
         }
 
+        // If both players went bust, the player closest to 21 wins.
         if (sums[0] > 21 && sums[1] > 21) {
             int player1Diff = sums[0] - 21;
             int player2Diff = sums[1] - 21;
@@ -143,13 +150,13 @@ public class BlackjackTwentyOne {
             } else {
                 return 2;
             }
-        } else if (sums[0] > 21) {
+        } else if (sums[0] > 21) { // If player 1 went bust, player 2 wins.
             return 2;
-        } else if (sums[1] > 21) {
+        } else if (sums[1] > 21) { // If player 2 went bust, player 1 wins.
             return 1;
-        } else if (sums[0] > sums[1]) {
+        } else if (sums[0] > sums[1]) { // If player 1 is closer to 21 than player 2, player 1 wins.
             return 1;
-        } else if (sums[1] > sums[0]) {
+        } else if (sums[1] > sums[0]) { // If player 2 is closer to 21 than player 1, player 2 wins.
             return 2;
         }
 

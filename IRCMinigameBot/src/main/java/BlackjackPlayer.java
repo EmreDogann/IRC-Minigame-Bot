@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+// Class holding the state of a blackjack player.
 public class BlackjackPlayer {
     private String name;
     private ArrayList<Integer> hand = new ArrayList<>();
